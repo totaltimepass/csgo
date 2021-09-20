@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>CSGO MM</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+      <script type="text/javascript" src="https://peterolson.github.io/BigInteger.js/BigInteger.min.js"></script>
+
+  <style id="compiled-css" type="text/css">
+      .container {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-areas: "input players"
+  "fetch players"
+  "fetch players";
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 80px;
+}
+
+.ta-container {
+  grid-area: input;
+ 
+}
+
+.button-container {
+  grid-area: fetch;
+  text-align: center;
+}
+
+.button{
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+}
+
+.players-container {
+  grid-area: players;
+ 
+}
+
+textarea {
+  resize: none;
+}
+
+
+    /* EOS */
+  </style>
+
+  <script id="insert"></script>
+
+
+</head>
+<body>
+    <body>
+
+  <div class="container">
+    <div class="ta-container">
+      <textarea type="textarea" id="input" style='white-space:pre' rows="10" cols="75"> </textarea>
+    </div>
+    <div class="button-container">
+      <input class="button" type="button" value="Fetch" onclick="getInputData();" />
+    </div>
+    <div class="players-container" id="players">
+
+    </div>
+  </div>
+</body>
+
+
+    <script type="text/javascript">//<![CDATA[
+
+
+function getInputData() {
+  let input = document.getElementById('input').value;
+  let lines = input.split("\n");
+  let players = [];
+  let playersdict = {};
+  let playersDiv = document.getElementById('players');
+  
+  for (let i = 0; i < lines.length; i++) {
+   
+  	console.log(lines[i]);
+    let playerInfo = lines[i].split(" ");    
+    let playerName = "";
+    let playerSteamId = "";
+    
+		
+    playerName = lines[i].substring(lines[i].indexOf("\""), lines[i].indexOf("STEAM_"));
+
+    playerSteamId = lines[i].substring(lines[i].indexOf("STEAM_"), lines[i].indexOf(" ", lines[i].indexOf("STEAM_")));
+    let playerSteamIdArr = playerSteamId.split(":");
+
+    let x = bigInt("76561197960265728");
+    let y = playerSteamIdArr[1];
+    let z = playerSteamIdArr[2];
+
+    let playerSteamId64 = x.plus(z * 2).plus(y).toString();
+    players.push(playerSteamId64);
+    playersdict[playerName] = playerSteamId64;
+  }
+
+  let displayText = "";
+  for (let key in playersdict) {
+
+    displayText += "<br />" + "<a href=https://csgostats.gg/player/" + playersdict[key] + ">" + key +"</a>" + "<br />";
+  }
+
+  playersDiv.innerHTML = displayText;
+}
+
+
+
+  //]]></script>
+
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "sunamj2h"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+
+
+</body>
+</html>
