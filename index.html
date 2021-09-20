@@ -3,48 +3,57 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title>CSGO MM</title>
+  <title>CSGO MM Player profiles</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="robots" content="noindex, nofollow">
   <meta name="googlebot" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
   <script
     type="text/javascript"
-    src="/js/lib/dummy.js"
-    
-  ></script>
+    src="/js/lib/dummy.js">
+  </script>
 
-    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
-
-      <script type="text/javascript" src="https://peterolson.github.io/BigInteger.js/BigInteger.min.js"></script>
-
+  <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  <script type="text/javascript" src="https://peterolson.github.io/BigInteger.js/BigInteger.min.js"></script>
   <style id="compiled-css" type="text/css">
-      .container {
+
+
+.container {
   display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  grid-auto-rows: minmax(100px, auto);
   width: 100%;
   height: 100%;
-  grid-template-areas: "input players"
-  "fetch players"
-  "fetch players";
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr 80px;
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+}
+
+.header {
+  grid-column: 1 / 5;
+  grid-row: 1;
+  #border-style: solid;
+  text-align: center;
+  margin-top: 10px;
 }
 
 .ta-container {
-  grid-area: input;
- 
+  grid-column: 1;
+  grid-row: 2 / 3;
+  #border-style: solid;
 }
 
 .button-container {
-  grid-area: fetch;
-  text-align: center;
+  grid-column: 1;
+  grid-row: 3 / 4;
+  #border-style: solid;
+  text-align: right;
 }
 
 .button{
   background-color: #4CAF50; /* Green */
-  border: none;
+  #border: none;
   color: white;
   padding: 15px 32px;
   text-align: center;
@@ -54,19 +63,20 @@
 }
 
 .players-container {
-  grid-area: players;
- 
+  grid-column: 2 / 5;
+  grid-row: 2 /8;
+  #border-style: solid;
+  text-align: left;
+  margin-left: 100px;
 }
 
 textarea {
   resize: none;
 }
 
+</style>
 
-    /* EOS */
-  </style>
-
-  <script id="insert"></script>
+<script id="insert"></script>
 
 
 </head>
@@ -74,20 +84,21 @@ textarea {
     <body>
 
   <div class="container">
-    <div class="ta-container">
-      <textarea type="textarea" id="input" style='white-space:pre' rows="12" cols="75">Replace the text here with the output of the status command. For example:
+  <div class="header">Use this website to input the status command from CSGO console and fetch csgostats.gg player profiles.</div>
+  <div class="ta-container">
+    <textarea type="textarea" id="input" style='white-space:pre' rows="12" cols="75">
+#  4 3 "Sugar" STEAM_1:0:161127040 02:05 93 0 active 786432
+#  6 5 "♛MaRsHeZzY™" STEAM_1:0:432113817 00:39 49 0 active 196608
+#  8 7 "kaykay" STEAM_1:0:577536023 00:39 46 0 active 786432
 #  9 8 "totaltimepass" STEAM_1:0:519114110 02:05 94 0 active 786432
-
-And then click on the Fetch button to get the csgostats.gg profiles.
-    </textarea>
-    </div>
-    <div class="button-container">
-      <input class="button" type="button" value="Fetch" onclick="getInputData();" />
-    </div>
-    <div class="players-container" id="players">
-
-    </div>
+# 13 12 "𝑬𝑵𝑶" STEAM_1:0:512022398 00:38 109 0 active 786432
+# 14 13 "★𝓗𝓘𝓣𝓩" STEAM_1:0:236018634 00:38 62 0 active 196608</textarea>
   </div>
+  <div class="button-container">
+    <input id="input" class="button" type="button" value="Fetch" onclick="getInputData();" />
+  </div>
+  <div id="players" class="players-container">csgostat.gg player profiles:</div>
+</div>
 </body>
 
 
@@ -100,7 +111,8 @@ function getInputData() {
   let players = [];
   let playersdict = {};
   let playersDiv = document.getElementById('players');
-  
+  let displayText = "csgostat.gg player profiles: <br>";
+
   for (let i = 0; i < lines.length; i++) {
    
   	console.log(lines[i]);
@@ -111,23 +123,31 @@ function getInputData() {
 		
     playerName = lines[i].substring(lines[i].indexOf("\""), lines[i].indexOf("STEAM_"));
 
-    playerSteamId = lines[i].substring(lines[i].indexOf("STEAM_"), lines[i].indexOf(" ", lines[i].indexOf("STEAM_")));
-    let playerSteamIdArr = playerSteamId.split(":");
+    if (playerName === ""){
+      displayText += "There was a problem parsing the steamIds for the players."
+      break;
+    }
+    else{
+      playerSteamId = lines[i].substring(lines[i].indexOf("STEAM_"), lines[i].indexOf(" ", lines[i].indexOf("STEAM_")));
+      let playerSteamIdArr = playerSteamId.split(":");
 
-    let x = bigInt("76561197960265728");
-    let y = playerSteamIdArr[1];
-    let z = playerSteamIdArr[2];
+      let x = bigInt("76561197960265728");
+      let y = playerSteamIdArr[1];
+      let z = playerSteamIdArr[2];
 
-    let playerSteamId64 = x.plus(z * 2).plus(y).toString();
-    players.push(playerSteamId64);
-    playersdict[playerName] = playerSteamId64;
+      let playerSteamId64 = x.plus(z * 2).plus(y).toString();
+      console.log(playerName);
+      console.log(playerSteamId64);
+      players.push(playerSteamId64);
+      playersdict[playerName] = playerSteamId64;
+    }
+
   }
-
-  let displayText = "";
+    
   for (let key in playersdict) {
-
     displayText += "<br />" + "<a href=https://csgostats.gg/player/" + playersdict[key] + ">" + key +"</a>" + "<br />";
   }
+  
 
   playersDiv.innerHTML = displayText;
 }
