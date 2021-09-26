@@ -9,11 +9,6 @@
   <meta name="googlebot" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <script
-    type="text/javascript"
-    src="/js/lib/dummy.js">
-  </script>
-
   <link rel="stylesheet" type="text/css" href="/css/result-light.css">
   <script type="text/javascript" src="https://peterolson.github.io/BigInteger.js/BigInteger.min.js"></script>
   <style id="compiled-css" type="text/css">
@@ -102,20 +97,18 @@ textarea {
 </body>
 
 
-    <script type="text/javascript">//<![CDATA[
-
+<script type="text/javascript">//<![CDATA[
 
 function getInputData() {
   let input = document.getElementById('input').value;
   let lines = input.split("\n");
-  let players = [];
   let playersdict = {};
   let playersDiv = document.getElementById('players');
   let displayText = "csgostat.gg player profiles: <br>";
 
   for (let i = 0; i < lines.length; i++) {
    
-  	console.log(lines[i]);
+    console.log(lines[i]);
     let playerInfo = lines[i].split(" ");    
     let playerName = "";
     let playerSteamId = "";
@@ -138,7 +131,6 @@ function getInputData() {
       let playerSteamId64 = x.plus(z * 2).plus(y).toString();
       console.log(playerName);
       console.log(playerSteamId64);
-      players.push(playerSteamId64);
       playersdict[playerName] = playerSteamId64;
     }
 
@@ -148,7 +140,6 @@ function getInputData() {
     displayText += "<br />" + "<a href=https://csgostats.gg/player/" + playersdict[key] + ">" + key +"</a>" + "<br />";
   }
   
-
   playersDiv.innerHTML = displayText;
 }
 
@@ -167,6 +158,16 @@ function getInputData() {
 
     // always overwrite window.name, in case users try to set it manually
     window.name = "result"
+  </script>
+	
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JTTD0S5NL"></script>
+  <script>
+  	window.dataLayer = window.dataLayer || [];
+  	function gtag(){dataLayer.push(arguments);}
+  	gtag('js', new Date());
+
+  	gtag('config', 'G-1JTTD0S5NL');
   </script>
 
 
